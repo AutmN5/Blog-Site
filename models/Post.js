@@ -32,6 +32,18 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: 'transparent'
   },
+  textColor: {
+    type: String,
+    default: '#f8f9fa'
+  },
+  titleColor: {
+    type: String,
+    default: '#ffffff'
+  },
+  borderColor: {
+    type: String,
+    default: '#333333'
+  },
   tags: {
     type: [String],
     default: []

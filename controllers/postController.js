@@ -72,7 +72,7 @@ module.exports.create_post_get = (req, res) => {
 };
 
 module.exports.create_post_post = async (req, res) => {
-  const { title, content, isPrivate, isGated, bgColor, tags } = req.body;
+  const { title, content, isPrivate, isGated, bgColor, textColor, titleColor, borderColor, tags } = req.body;
   
   // Parse tags
   let parsedTags = [];
@@ -88,6 +88,9 @@ module.exports.create_post_post = async (req, res) => {
       isPrivate: isPrivate === 'on' || isPrivate === true,
       isGated: isGated === 'on' || isGated === true,
       bgColor: bgColor || 'transparent',
+      textColor: textColor || '#f8f9fa',
+      titleColor: titleColor || '#ffffff',
+      borderColor: borderColor || '#333333',
       tags: parsedTags
     });
     res.redirect(`/posts/${post.slug}`);
@@ -127,7 +130,7 @@ module.exports.edit_post_get = async (req, res) => {
 };
 
 module.exports.edit_post_post = async (req, res) => {
-  const { title, content, isPrivate, isGated, bgColor, tags } = req.body;
+  const { title, content, isPrivate, isGated, bgColor, textColor, titleColor, borderColor, tags } = req.body;
   let parsedTags = [];
   if (tags) {
     parsedTags = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
@@ -142,6 +145,9 @@ module.exports.edit_post_post = async (req, res) => {
     post.isPrivate = isPrivate === 'on' || isPrivate === true;
     post.isGated = isGated === 'on' || isGated === true;
     post.bgColor = bgColor || 'transparent';
+    post.textColor = textColor || '#f8f9fa';
+    post.titleColor = titleColor || '#ffffff';
+    post.borderColor = borderColor || '#333333';
     post.tags = parsedTags;
     await post.save();
     
