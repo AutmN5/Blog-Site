@@ -6,6 +6,7 @@ const path = require('path');
 
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const { checkUser } = require('./middlewares/authMiddleware');
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use('*', checkUser);
 // Routes
 app.use(authRoutes);
 app.use(postRoutes);
+app.use(adminRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -130,6 +130,11 @@
         </audio>
 
         <% if (user) { %>
+          <% if (user.isAdmin) { %>
+            <li class="nav-item">
+              <a class="nav-link btn btn-outline-danger btn-sm me-3 text-danger" href="/admin" style="border-color: #ef4444;">[ ADMIN_PANEL ]</a>
+            </li>
+          <% } %>
           <li class="nav-item me-3">
             <a class="nav-link text-secondary" href="/profile">usr: <%= user.username %></a>
           </li>

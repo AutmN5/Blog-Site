@@ -1,0 +1,122 @@
+<%- include('./partials/header'); -%>
+
+<div class="row mb-5">
+  <div class="col-12">
+    <div class="ascii-logo text-danger">
+      // WARNING: ADMIN OVERRIDE ENGAGED
+      // CONNECTED AS: <%= user.username %>
+    </div>
+    <h1 class="terminal-header text-danger">> ADMIN_OVERRIDE_PANEL</h1>
+    <p class="text-secondary">Execute administrative protocols. Manage system users and records.</p>
+  </div>
+</div>
+
+<div class="row g-4 mb-5">
+  <div class="col-12">
+    <h3 class="terminal-header mb-3 text-warning">> SYSTEM_USERS</h3>
+    <div class="table-responsive" style="border: 1px dashed #fbbf24;">
+      <table class="table table-dark table-hover mb-0" style="background-color: transparent;">
+        <thead>
+          <tr>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">ID</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">USERNAME</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">EMAIL</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">ROLE</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u => { %>
+            <tr>
+              <td class="text-light" style="border-color: #333;"><%= u._id %></td>
+              <td class="text-light" style="border-color: #333;"><%= u.username %></td>
+              <td class="text-light" style="border-color: #333;"><%= u.email %></td>
+              <td class="text-light" style="border-color: #333;">
+                <% if (u.isAdmin) { %>
+                  <span class="badge bg-danger rounded-0">[ ADMIN ]</span>
+                <% } else { %>
+                  <span class="badge bg-secondary rounded-0">[ USER ]</span>
+                <% } %>
+              </td>
+              <td style="border-color: #333;">
+                <% if (u._id.toString() !== user._id.toString()) { %>
+                  <button class="btn btn-outline-danger btn-sm delete-user-btn" data-id="<%= u._id %>" aria-label="Delete user">[ DELETE_USER ]</button>
+                <% } else { %>
+                  <span class="text-secondary small">THIS IS YOU</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-5">
+  <div class="col-12">
+    <h3 class="terminal-header mb-3 text-warning">> SYSTEM_RECORDS</h3>
+    <div class="table-responsive" style="border: 1px dashed #fbbf24;">
+      <table class="table table-dark table-hover mb-0" style="background-color: transparent;">
+        <thead>
+          <tr>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">AUTHOR</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">TITLE</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">CREATED</th>
+            <th class="text-secondary" style="border-bottom: 1px dashed #fbbf24;">ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% posts.forEach(post => { %>
+            <tr>
+              <td class="text-light" style="border-color: #333;"><%= post.author ? post.author.username : 'UNKNOWN' %></td>
+              <td class="text-light" style="border-color: #333;">
+                <a href="/posts/<%= post.slug %>" class="text-light text-decoration-none"><%= post.title %></a>
+              </td>
+              <td class="text-light" style="border-color: #333;"><%= new Date(post.createdAt).toLocaleDateString() %></td>
+              <td style="border-color: #333;">
+                <button class="btn btn-outline-warning btn-sm delete-post-btn" data-id="<%= post._id %>" aria-label="Delete post">[ DELETE_POST ]</button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Delete User Logic
+  document.querySelectorAll('.delete-user-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      if (confirm('WARNING: PERMANENTLY DELETE THIS USER AND ALL THEIR POSTS? THIS CANNOT BE UNDONE.')) {
+        try {
+          const res = await fetch(`/admin/users/${btn.getAttribute('data-id')}`, { method: 'DELETE' });
+          const data = await res.json();
+          if (data.redirect) window.location.href = data.redirect;
+          if (data.error) alert(data.error);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    });
+  });
+
+  // Delete Post Logic
+  document.querySelectorAll('.delete-post-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      if (confirm('WARNING: PERMANENTLY DELETE THIS RECORD?')) {
+        try {
+          const res = await fetch(`/admin/posts/${btn.getAttribute('data-id')}`, { method: 'DELETE' });
+          const data = await res.json();
+          if (data.redirect) window.location.href = data.redirect;
+          if (data.error) alert(data.error);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    });
+  });
+</script>
+
+<%- include('./partials/footer'); -%>

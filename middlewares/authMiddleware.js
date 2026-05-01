@@ -18,6 +18,14 @@ const requireAuth = (req, res, next) => {
   }
 };
 
+const requireAdmin = (req, res, next) => {
+  if (res.locals.user && res.locals.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).render('404', { title: 'Access Denied' });
+  }
+};
+
 const checkUser = (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
@@ -37,4 +45,4 @@ const checkUser = (req, res, next) => {
   }
 };
 
-module.exports = { requireAuth, checkUser };
+module.exports = { requireAuth, requireAdmin, checkUser };
