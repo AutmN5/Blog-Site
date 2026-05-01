@@ -19,6 +19,22 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  isPrivate: {
+    type: Boolean,
+    default: false
+  },
+  isGated: {
+    type: Boolean,
+    default: false
+  },
+  bgColor: {
+    type: String,
+    default: 'transparent'
+  },
+  tags: {
+    type: [String],
+    default: []
   }
 }, { timestamps: true });
 

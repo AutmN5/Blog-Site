@@ -1,0 +1,57 @@
+<%- include('./partials/header'); -%>
+
+<div class="row mb-5">
+  <div class="col-12">
+    <div class="ascii-logo">
+      // ACCESSING USER MAINFRAME
+      // PROFILE: <%= user.username %>
+    </div>
+    <h1 class="terminal-header">> USER_PROFILE</h1>
+    <p class="text-secondary">Manage your records and access protocols.</p>
+  </div>
+</div>
+
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <div class="card-body">
+        <h5 class="terminal-header mb-4">> IDENTIFICATION</h5>
+        <div class="text-light mb-2"><strong>USERNAME:</strong> <%= user.username %></div>
+        <div class="text-secondary small mt-4" style="border-top: 1px dashed #333; padding-top: 10px;">
+          SYSTEM ID: <%= user._id %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-8">
+    <h3 class="terminal-header mb-3">> YOUR_RECORDS</h3>
+    <% if (posts.length > 0) { %>
+      <% posts.forEach(post => { %>
+        <div class="card p-3 mb-3">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="terminal-header mb-1" style="font-size: 1.1rem;"><%= post.title %></h5>
+              <div class="text-secondary small">
+                TIMESTAMP: <%= new Date(post.createdAt).toISOString() %>
+                <% if (post.isPrivate) { %>
+                  <span class="badge bg-danger ms-2 rounded-0">[ PRIVATE ]</span>
+                <% } %>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="/posts/<%= post.slug %>" class="btn btn-outline-light btn-sm">> VIEW</a>
+              <a href="/posts/<%= post._id %>/edit" class="btn btn-outline-warning btn-sm">> EDIT</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="p-4" style="border: 1px dashed #333;">
+        <h5 class="text-secondary mb-0">NO RECORDS FOUND UNDER THIS IDENTIFICATION.</h5>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('./partials/footer'); -%>

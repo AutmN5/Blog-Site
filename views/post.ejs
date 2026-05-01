@@ -1,4 +1,5 @@
 <%- include('./partials/header'); -%>
+<div id="scrollProgress" style="position: fixed; top: 0; left: 0; width: 0%; height: 3px; background-color: #fbbf24; z-index: 9999; transition: width 0.1s;"></div>
 
 <div class="row justify-content-center mt-4">
   <div class="col-lg-8">
@@ -6,28 +7,78 @@
       // READING FILE: <%= post.slug %>.txt
       // PARSING CONTENT...
     </div>
-    <div class="card p-md-5 p-3 mb-4">
+    <div class="card p-md-5 p-3 mb-4" style="background-color: <%= post.bgColor || 'transparent' %> !important;">
       <div class="card-body">
         <h1 class="terminal-header" style="font-size: 2.5rem;"><%= post.title %></h1>
         <div class="text-secondary" style="border-bottom: 1px dashed #333; padding-bottom: 15px; margin-bottom: 25px;">
           AUTHOR: <%= post.author.username %><br>
-          TIMESTAMP: <%= new Date(post.createdAt).toISOString() %>
-        </div>
-        
-        <div class="content text-light" style="line-height: 1.8; opacity: 0.9;">
-          <%- post.content.replace(/\n/g, '<br>') %>
-        </div>
-        
-        <div class="mt-5 pt-3" style="border-top: 1px dashed #333; display: flex; justify-content: space-between;">
-          <a href="/" class="btn btn-outline-light">< RETURN_TO_ROOT</a>
-          <% if (user && user._id.toString() === post.author._id.toString()) { %>
-            <button class="btn btn-outline-danger" id="deleteBtn" data-id="<%= post._id %>">[ EXECUTE_DELETE ]</button>
+          TIMESTAMP: <%= new Date(post.createdAt).toISOString() %><br>
+          <% const words = post.content.split(' ').length; const readTime = Math.ceil(words / 200) || 1; %>
+          EST_READ_TIME: <%= readTime %> MIN
+          <% if (post.isPrivate) { %>
+            <br><span class="badge bg-danger mt-2 rounded-0">[ PRIVATE_RECORD ]</span>
           <% } %>
+        </div>
+        
+        <% if (post.tags && post.tags.length > 0) { %>
+          <div class="mb-4">
+            <% post.tags.forEach(tag => { %>
+              <span class="badge" style="border: 1px solid #4b5563; color: #9ca3af; font-weight: normal; border-radius: 0; font-size: 0.8rem;">#<%= tag %></span>
+            <% }) %>
+          </div>
+        <% } %>
+        
+        <% if (post.isGated && !user) { %>
+          <div class="content text-light" style="line-height: 1.8; opacity: 0.9;">
+            <%- post.content.substring(0, 200).replace(/\n/g, '<br>') %>...
+          </div>
+          <div class="alert alert-warning text-center mt-4 rounded-0 bg-transparent" style="color: #fbbf24; border: 1px dashed #fbbf24 !important;">
+            > ACCESS_RESTRICTED: THIS RECORD IS GATED.<br>
+            > <a href="/login" class="text-warning">LOG_IN</a> OR <a href="/signup" class="text-warning">SIGN_UP</a> TO DECRYPT THE FULL MESSAGE.
+          </div>
+        <% } else { %>
+          <div class="content text-light" style="line-height: 1.8; opacity: 0.9;">
+            <%- post.content.replace(/\n/g, '<br>') %>
+          </div>
+        <% } %>
+        
+        <div class="mt-5 pt-3" style="border-top: 1px dashed #333; display: flex; justify-content: space-between; align-items: center;">
+          <a href="/" class="btn btn-outline-light" aria-label="Return to home">< RETURN_TO_ROOT</a>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-light" aria-label="Share post link" onclick="navigator.clipboard.writeText(window.location.href); alert('LINK_COPIED_TO_CLIPBOARD');">[ SHARE_LINK ]</button>
+            <% if (user && user._id.toString() === post.author._id.toString()) { %>
+              <button class="btn btn-outline-danger" id="deleteBtn" data-id="<%= post._id %>" aria-label="Delete post">[ EXECUTE_DELETE ]</button>
+            <% } %>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const scrollPx = document.documentElement.scrollTop;
+    const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = `${scrollPx / winHeightPx * 100}%`;
+    document.getElementById('scrollProgress').style.width = scrolled;
+  });
+
+  document.querySelectorAll('pre').forEach(block => {
+    block.style.position = 'relative';
+    const btn = document.createElement('button');
+    btn.innerText = '[ COPY ]';
+    btn.className = 'btn btn-outline-light btn-sm';
+    btn.setAttribute('aria-label', 'Copy code');
+    btn.style.cssText = 'position: absolute; top: 5px; right: 5px; font-size: 0.6rem;';
+    btn.onclick = () => {
+      navigator.clipboard.writeText(block.innerText);
+      btn.innerText = '[ COPIED ]';
+      setTimeout(() => btn.innerText = '[ COPY ]', 2000);
+    };
+    block.appendChild(btn);
+  });
+</script>
 
 <% if (user && user._id.toString() === post.author._id.toString()) { %>
 <script>

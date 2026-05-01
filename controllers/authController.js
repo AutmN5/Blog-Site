@@ -40,11 +40,11 @@ const createToken = (id) => {
 };
 
 module.exports.signup_get = (req, res) => {
-  res.render('signup', { title: 'Sign Up - Avirup Mondal Blog' });
+  res.render('signup', { title: 'Sign Up - The Mainframe' });
 };
 
 module.exports.login_get = (req, res) => {
-  res.render('login', { title: 'Log In - Avirup Mondal Blog' });
+  res.render('login', { title: 'Log In - The Mainframe' });
 };
 
 module.exports.signup_post = async (req, res) => {
@@ -87,4 +87,15 @@ module.exports.login_post = async (req, res) => {
 module.exports.logout_get = (req, res) => {
   res.cookie('jwt', '', { maxAge: 1 });
   res.redirect('/');
+};
+
+const Post = require('../models/Post');
+module.exports.profile_get = async (req, res) => {
+  try {
+    const posts = await Post.find({ author: res.locals.user._id }).sort({ createdAt: -1 });
+    res.render('profile', { title: 'User Profile - The Mainframe', posts });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server Error');
+  }
 };
