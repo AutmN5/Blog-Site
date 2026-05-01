@@ -5,7 +5,49 @@
     <p class="mb-0">&copy; <%= new Date().getFullYear() %> Avirup Mondal. All rights reserved.</p>
   </div>
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.css"></script>
+<script>
+  // Cyberpunk Lofi Audio Logic
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  
+  // Set initial volume
+  if(bgMusic) bgMusic.volume = 0.4;
+
+  // Check localStorage for mute state
+  const isMuted = localStorage.getItem('isMuted') === 'true';
+  
+  if (isMuted && bgMusic) {
+    bgMusic.pause();
+    if(musicToggle) musicToggle.textContent = '[ 🔈 UNMUTE ]';
+  } else if (bgMusic) {
+    // Browsers block autoplay unless user interacts, so it might not play immediately.
+    // The promise handles the rejection if autoplay is blocked.
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        if(musicToggle) musicToggle.textContent = '[ 🔊 MUTE ]';
+      }).catch(error => {
+        // Auto-play was prevented by browser policy
+        if(musicToggle) musicToggle.textContent = '[ 🔈 UNMUTE ]';
+        localStorage.setItem('isMuted', 'true');
+      });
+    }
+  }
+
+  if(musicToggle) {
+    musicToggle.addEventListener('click', () => {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        musicToggle.textContent = '[ 🔊 MUTE ]';
+        localStorage.setItem('isMuted', 'false');
+      } else {
+        bgMusic.pause();
+        musicToggle.textContent = '[ 🔈 UNMUTE ]';
+        localStorage.setItem('isMuted', 'true');
+      }
+    });
+  }
+</script>
 </body>
 </html>

@@ -1,21 +1,27 @@
 <%- include('./partials/header'); -%>
 
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-4">
   <div class="col-md-8">
-    <div class="card shadow-lg border border-secondary rounded-4 bg-dark text-light mt-4">
-      <div class="card-body p-4 p-md-5">
-        <h2 class="mb-4 fw-bold">Create New Post</h2>
+    <div class="ascii-logo">
+      // INITIALIZING NEW_POST_WIZARD.EXE
+      // WAITING FOR USER INPUT...
+    </div>
+    <div class="card p-4 p-md-5">
+      <div class="card-body">
+        <h2 class="terminal-header mb-4">> CREATE_NEW_POST</h2>
         <form action="/create" method="POST">
-          <div class="mb-3">
-            <label for="title" class="form-label fw-semibold">Post Title</label>
-            <input type="text" class="form-control bg-dark text-light border-secondary" id="title" name="title" required placeholder="Enter an engaging title">
+          <div class="mb-4">
+            <label for="title" class="form-label text-secondary">POST_TITLE:</label>
+            <input type="text" class="form-control" id="title" name="title" required placeholder="> type title here...">
           </div>
           <div class="mb-4">
-            <label for="content" class="form-label fw-semibold">Content</label>
-            <textarea class="form-control bg-dark text-light border-secondary" id="content" name="content" rows="10" required placeholder="Write your blog post here..."></textarea>
+            <label for="content" class="form-label text-secondary">POST_CONTENT:</label>
+            <textarea class="form-control" id="content" name="content" rows="12" required placeholder="> start typing your content..."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold">Publish Post</button>
-          <a href="/" class="btn btn-outline-light rounded-pill px-4 py-2 ms-2">Cancel</a>
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary px-5 py-2">[ PUBLISH_RECORD ]</button>
+            <a href="/" class="btn btn-outline-light px-4 py-2">[ CANCEL ]</a>
+          </div>
         </form>
       </div>
     </div>

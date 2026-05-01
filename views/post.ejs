@@ -1,28 +1,30 @@
 <%- include('./partials/header'); -%>
 
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-4">
   <div class="col-lg-8">
-    <div class="card shadow-sm border border-secondary rounded-4 bg-dark text-light mb-4">
-      <div class="card-body p-md-5">
-        <h1 class="display-5 fw-bold mb-3"><%= post.title %></h1>
-        <div class="d-flex justify-content-between align-items-center text-muted border-bottom border-secondary pb-3 mb-4">
-          <div>
-            <span>By <strong><%= post.author.username %></strong></span>
-            <span class="mx-2">&bull;</span>
-            <span><%= new Date(post.createdAt).toLocaleDateString() %></span>
-          </div>
-          <% if (user && user._id.toString() === post.author._id.toString()) { %>
-            <button class="btn btn-sm btn-outline-danger" id="deleteBtn" data-id="<%= post._id %>">Delete Post</button>
-          <% } %>
+    <div class="ascii-logo mb-4">
+      // READING FILE: <%= post.slug %>.txt
+      // PARSING CONTENT...
+    </div>
+    <div class="card p-md-5 p-3 mb-4">
+      <div class="card-body">
+        <h1 class="terminal-header" style="font-size: 2.5rem;"><%= post.title %></h1>
+        <div class="text-secondary" style="border-bottom: 1px dashed #333; padding-bottom: 15px; margin-bottom: 25px;">
+          AUTHOR: <%= post.author.username %><br>
+          TIMESTAMP: <%= new Date(post.createdAt).toISOString() %>
         </div>
         
-        <div class="content fs-5" style="line-height: 1.8;">
+        <div class="content text-light" style="line-height: 1.8; opacity: 0.9;">
           <%- post.content.replace(/\n/g, '<br>') %>
         </div>
+        
+        <div class="mt-5 pt-3" style="border-top: 1px dashed #333; display: flex; justify-content: space-between;">
+          <a href="/" class="btn btn-outline-light">< RETURN_TO_ROOT</a>
+          <% if (user && user._id.toString() === post.author._id.toString()) { %>
+            <button class="btn btn-outline-danger" id="deleteBtn" data-id="<%= post._id %>">[ EXECUTE_DELETE ]</button>
+          <% } %>
+        </div>
       </div>
-    </div>
-    <div class="text-center">
-      <a href="/" class="btn btn-outline-light rounded-pill px-4">&larr; Back to Home</a>
     </div>
   </div>
 </div>
@@ -33,7 +35,7 @@
   if (deleteBtn) {
     deleteBtn.addEventListener('click', async (e) => {
       const postId = deleteBtn.getAttribute('data-id');
-      if (confirm('Are you sure you want to delete this post?')) {
+      if (confirm('WARNING: PERMANENTLY DELETE RECORD?')) {
         try {
           const res = await fetch(`/posts/${postId}`, {
             method: 'DELETE'

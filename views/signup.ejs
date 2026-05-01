@@ -1,30 +1,33 @@
 <%- include('./partials/header'); -%>
 
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-5">
   <div class="col-md-6 col-lg-5">
-    <div class="card shadow-lg border border-secondary rounded-4 bg-dark text-light mt-5">
-      <div class="card-body p-5">
-        <h2 class="text-center mb-4 fw-bold">Sign Up</h2>
+    <div class="ascii-logo text-center">
+      // CREATING NEW USER RECORD...
+    </div>
+    <div class="card p-4">
+      <div class="card-body">
+        <h2 class="terminal-header text-center mb-4">> USER_AUTH: SIGNUP</h2>
         <form>
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control bg-dark text-light border-secondary" id="username" name="username" required>
+            <label for="username" class="form-label text-secondary">USERNAME:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
             <div class="username error"></div>
           </div>
           <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control bg-dark text-light border-secondary" id="email" name="email" required>
+            <label for="email" class="form-label text-secondary">EMAIL_ADDRESS:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
             <div class="email error"></div>
           </div>
           <div class="mb-4">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control bg-dark text-light border-secondary" id="password" name="password" required>
+            <label for="password" class="form-label text-secondary">PASSWORD:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
             <div class="password error"></div>
           </div>
-          <button class="btn btn-primary w-100 rounded-pill py-2 fw-bold" type="submit">Sign Up</button>
+          <button class="btn btn-primary w-100 py-2" type="submit">[ REGISTER_USER ]</button>
         </form>
         <div class="text-center mt-4">
-          <p class="mb-0">Already have an account? <a href="/login" class="text-decoration-none text-primary">Log in</a></p>
+          <p class="mb-0 text-secondary">HAVE ACCOUNT? <a href="/login" class="text-decoration-none text-light">> LOG_IN</a></p>
         </div>
       </div>
     </div>
