@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const path = require('path');
+const compression = require('compression');
+const helmet = require('helmet');
 
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
@@ -14,6 +16,8 @@ dotenv.config();
 const app = express();
 
 // Middlewares
+app.use(helmet({ contentSecurityPolicy: false })); // Basic security headers, CSP disabled to not break existing scripts
+app.use(compression()); // Gzip compression for faster loading
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
